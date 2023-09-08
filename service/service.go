@@ -90,8 +90,15 @@ func NewService() *Service {
 	}
 
 	api := gin.Default()
+	api.RedirectTrailingSlash = false
 
 	api.Use(s.nocache())
+
+	api.GET("rtc/:channelName/:role/:tokenType/:rtcuid", s.getRtcToken)
+	api.GET("rtm/:rtmuid", s.getRtmToken)
+	api.GET("rte/:channelName/:role/:tokenType/:rtcuid", s.getRtcRtmToken)
+	api.GET("rte/:channelName/:role/:tokenType/:rtcuid/:rtmuid", s.getRtcRtmToken)
+
 	api.GET("rtc/:channelName/:role/:tokenType/:rtcuid/", s.getRtcToken)
 	api.GET("rtm/:rtmuid/", s.getRtmToken)
 	api.GET("rte/:channelName/:role/:tokenType/:rtcuid/", s.getRtcRtmToken)
