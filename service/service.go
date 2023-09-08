@@ -94,21 +94,23 @@ func NewService() *Service {
 
 	api.Use(s.nocache())
 
-	api.GET("rtc/:channelName/:role/:tokenType/:rtcuid", s.getRtcToken)
-	api.GET("rtm/:rtmuid", s.getRtmToken)
-	api.GET("rte/:channelName/:role/:tokenType/:rtcuid", s.getRtcRtmToken)
-	api.GET("rte/:channelName/:role/:tokenType/:rtcuid/:rtmuid", s.getRtcRtmToken)
+	group := api.Group("/agora-token-service")
 
-	api.GET("rtc/:channelName/:role/:tokenType/:rtcuid/", s.getRtcToken)
-	api.GET("rtm/:rtmuid/", s.getRtmToken)
-	api.GET("rte/:channelName/:role/:tokenType/:rtcuid/", s.getRtcRtmToken)
-	api.GET("rte/:channelName/:role/:tokenType/:rtcuid/:rtmuid/", s.getRtcRtmToken)
-	api.GET("chat/app/", s.getChatToken)             // Chat token for API calls
-	api.GET("chat/account/:chatid/", s.getChatToken) // Chat token for SDK calls
+	group.GET("rtc/:channelName/:role/:tokenType/:rtcuid", s.getRtcToken)
+	group.GET("rtm/:rtmuid", s.getRtmToken)
+	group.GET("rte/:channelName/:role/:tokenType/:rtcuid", s.getRtcRtmToken)
+	group.GET("rte/:channelName/:role/:tokenType/:rtcuid/:rtmuid", s.getRtcRtmToken)
 
-	api.POST("/getToken", s.getToken)
+	group.GET("rtc/:channelName/:role/:tokenType/:rtcuid/", s.getRtcToken)
+	group.GET("rtm/:rtmuid/", s.getRtmToken)
+	group.GET("rte/:channelName/:role/:tokenType/:rtcuid/", s.getRtcRtmToken)
+	group.GET("rte/:channelName/:role/:tokenType/:rtcuid/:rtmuid/", s.getRtcRtmToken)
+	group.GET("chat/app/", s.getChatToken)             // Chat token for API calls
+	group.GET("chat/account/:chatid/", s.getChatToken) // Chat token for SDK calls
 
-	api.GET("ping", func(ctx *gin.Context) {
+	group.POST("/getToken", s.getToken)
+
+	group.GET("ping", func(ctx *gin.Context) {
 		ctx.String(200, "pong")
 	})
 
