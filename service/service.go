@@ -100,6 +100,11 @@ func NewService() *Service {
 	api.GET("chat/account/:chatid/", s.getChatToken) // Chat token for SDK calls
 
 	api.POST("/getToken", s.getToken)
+
+	api.GET("ping", func(ctx *gin.Context) {
+		ctx.String(200, "pong")
+	})
+
 	s.Server.Handler = api
 	return s
 }
